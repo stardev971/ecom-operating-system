@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Theme tokens. Light is the default (:root); dark applies when <html> has
+   the `.dark` class. Values are space-separated RGB triplets so Tailwind's
+   `rgb(var(--x) / <alpha-value>)` opacity modifiers keep working.
+--------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  --bg: 246 247 250;
+  --panel: 255 255 255;
+  --card: 255 255 255;
+  --cardhover: 244 246 249;
+  --border: 226 230 236;
+  --borderlight: 210 216 224;
+  --ink: 17 24 39;
+  --muted: 82 92 110;
+  --faint: 130 139 155;
+
+  --brand: 99 102 241;
+  --brand-soft: 79 70 229;
+  --brand-dim: 67 56 202;
+  --teal: 13 148 136;
+  --emerald: 5 150 105;
+  --amber: 202 110 8;
+  --rose: 225 29 72;
+  --sky: 2 132 199;
+  --violet: 124 58 237;
+
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 28px -14px rgba(16, 24, 40, 0.16);
+  --grid-dot: 17 24 39;
+  --grid-dot-alpha: 0.05;
+  --scroll-track: 246 247 250;
+  --scroll-thumb: 210 216 224;
+  --scroll-thumb-hover: 186 194 205;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --bg: 10 14 23;
+  --panel: 17 23 38;
+  --card: 21 28 44;
+  --cardhover: 26 34 51;
+  --border: 34 44 64;
+  --borderlight: 44 56 80;
+  --ink: 234 240 249;
+  --muted: 147 161 184;
+  --faint: 100 116 139;
+
+  --brand: 99 102 241;
+  --brand-soft: 129 140 248;
+  --brand-dim: 67 56 202;
+  --teal: 45 212 191;
+  --emerald: 52 211 153;
+  --amber: 251 191 36;
+  --rose: 251 113 133;
+  --sky: 56 189 248;
+  --violet: 167 139 250;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --grid-dot: 255 255 255;
+  --grid-dot-alpha: 0.04;
+  --scroll-track: 10 14 23;
+  --scroll-thumb: 40 50 74;
+  --scroll-thumb-hover: 54 66 95;
+}
+
+html,
+body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--ink));
+  font-feature-settings: "cv11", "ss01";
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  transition: background-color 0.2s ease;
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--scroll-thumb));
+  border-radius: 8px;
+  border: 2px solid rgb(var(--scroll-track));
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--scroll-thumb-hover));
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-border bg-card shadow-card;
+  }
+  .card-pad {
+    @apply p-5;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-white hover:bg-brand-dim;
+  }
+  .btn-ghost {
+    @apply btn border border-border bg-transparent text-muted hover:bg-cardhover hover:text-ink;
+  }
+  .btn-soft {
+    @apply btn bg-cardhover text-ink hover:bg-border;
+  }
+  .input {
+    @apply w-full rounded-lg border border-border bg-panel px-3 py-2 text-sm text-ink placeholder:text-faint outline-none focus:border-brand;
+  }
+  .label {
+    @apply text-xs font-medium uppercase tracking-wide text-faint;
+  }
+  .section-title {
+    @apply text-sm font-semibold text-ink;
+  }
+  .grid-bg {
+    background-image: radial-gradient(circle at 1px 1px, rgb(var(--grid-dot) / var(--grid-dot-alpha)) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+}
