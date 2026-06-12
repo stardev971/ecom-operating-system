@@ -10,6 +10,7 @@ import {
 import { useApp } from "./Providers";
 import { Avatar } from "./ui";
 import { searchAll } from "@/lib/search";
+import { clearAuth } from "@/lib/auth";
 
 const RANGES = ["Last 7 days", "Last 30 days", "Last 90 days", "This year"];
 
@@ -114,7 +115,7 @@ export default function Topbar({ onMenu }) {
               {RANGES.map((r) => (
                 <button
                   key={r}
-                  onClick={() => { setRange(r); setPanel(null); }}
+                  onClick={() => { setRange(r); setPanel(null); if (r !== range) toast(`Dashboard updated — ${r}`, { type: "info" }); }}
                   className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-muted hover:bg-cardhover hover:text-ink"
                 >
                   {r} {range === r && <Check size={14} className="text-brand-soft" />}
@@ -208,9 +209,12 @@ export default function Topbar({ onMenu }) {
               <Link href="/settings" onClick={() => setPanel(null)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-muted hover:bg-cardhover hover:text-ink">
                 <User size={15} /> Profile
               </Link>
-              <Link href="/" className="flex items-center gap-2.5 border-t border-border px-4 py-2.5 text-sm text-rose hover:bg-cardhover">
+              <button
+                onClick={() => { clearAuth(); setPanel(null); router.push("/"); }}
+                className="flex w-full items-center gap-2.5 border-t border-border px-4 py-2.5 text-left text-sm text-rose hover:bg-cardhover"
+              >
                 <LogOut size={15} /> Sign out
-              </Link>
+              </button>
             </div>
           )}
         </div>

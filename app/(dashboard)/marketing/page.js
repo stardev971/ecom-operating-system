@@ -12,16 +12,17 @@ import { usd, usdCompact, num, pct } from "@/lib/format";
 const CH_COLOR = { meta: "#6366f1", google: "#38bdf8", tiktok: "#fb7185", email: "#34d399" };
 
 export default function Marketing() {
-  const { data, recStatus } = useApp();
-  const k = data.kpis;
+  const { data, recStatus, metrics, rangeDays, rangeLabel, range } = useApp();
+  const k = metrics;
   const m = data.marketing;
+  const scale = (rangeDays || 30) / 30;
   const [tab, setTab] = useState("all");
 
   const campaigns = [...data.campaigns]
     .filter((c) => (tab === "all" ? true : c.channel === tab))
     .sort((a, b) => b.revenue - a.revenue);
 
-  const channelBars = m.channelCompare.map((c) => ({ label: c.name.split(" ")[0], Revenue: c.revenue, Spend: c.spend }));
+  const channelBars = m.channelCompare.map((c) => ({ label: c.name.split(" ")[0], Revenue: c.revenue * scale, Spend: c.spend * scale }));
   const attrBars = m.attribution.map((a) => ({ label: a.model, Meta: a.meta, Google: a.google, TikTok: a.tiktok, Email: a.email }));
   const maxFunnel = m.funnel[0].value;
 
@@ -33,7 +34,7 @@ export default function Marketing() {
     <div>
       <PageHeader
         title="Marketing Intelligence"
-        subtitle="Centralized acquisition performance across every paid and owned channel."
+        subtitle={`Centralized acquisition performance across every paid and owned channel. ${range}.`}
         icon={Megaphone}
         iconAccent="violet"
         live
@@ -45,7 +46,7 @@ export default function Marketing() {
         <KpiCard label="CAC" value={usd(k.cac)} delta={12.0} deltaGood={false} icon={Users} metric="cac" accent="rose" />
         <KpiCard label="LTV" value={usd(k.ltv)} delta={4.4} icon={Repeat} metric="ltv" accent="emerald" />
         <KpiCard label="Conversion Rate" value={pct(k.convRate)} delta={0.4} icon={MousePointerClick} metric="convRate" accent="sky" />
-        <KpiCard label="Campaign Revenue" value={usdCompact(m.totalCampRev)} delta={9.1} icon={Megaphone} metric="revenue" accent="violet" />
+        <KpiCard label="Campaign Revenue" value={usdCompact(m.totalCampRev * scale)} delta={9.1} icon={Megaphone} metric="revenue" accent="violet" />
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
@@ -132,8 +133,8 @@ export default function Marketing() {
                         <span className="font-medium text-ink">{c.name}</span>
                       </div>
                     </Td>
-                    <Td right className="text-muted">{usdCompact(c.spend)}</Td>
-                    <Td right className="text-muted">{usdCompact(c.revenue)}</Td>
+                    <Td right className="text-muted">{usdCompact(c.spend * scale)}</Td>
+                    <Td right className="text-muted">{usdCompact(c.revenue * scale)}</Td>
                     <Td right className={`font-semibold ${c.roas >= 3 ? "text-emerald" : c.roas < 1.4 ? "text-rose" : "text-ink"}`}>{c.roas}x</Td>
                     <Td right><StatusBadge status={c.status} /></Td>
                   </tr>

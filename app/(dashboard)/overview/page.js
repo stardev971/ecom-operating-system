@@ -12,17 +12,17 @@ import { usd, usdCompact, num, pct } from "@/lib/format";
 const dlabel = (ts) => new Date(ts).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export default function Overview() {
-  const { data, recStatus } = useApp();
-  const k = data.kpis;
+  const { data, recStatus, metrics, channelRev, trend: trendDaily, rangeLabel, range } = useApp();
+  const k = metrics;
 
-  const trend = data.dailyArr.slice(-90).map((d) => ({ label: dlabel(d.ts), Revenue: d.revenue, Profit: d.profit }));
+  const trend = trendDaily.map((d) => ({ label: dlabel(d.ts), Revenue: d.revenue, Profit: d.profit }));
   const channelDonut = [
-    { name: "Meta", value: data.channelRev.meta, color: "#6366f1" },
-    { name: "Google", value: data.channelRev.google, color: "#38bdf8" },
-    { name: "Email", value: data.channelRev.email, color: "#34d399" },
-    { name: "Organic", value: data.channelRev.organic, color: "#fbbf24" },
-    { name: "TikTok", value: data.channelRev.tiktok, color: "#fb7185" },
-    { name: "Direct", value: data.channelRev.direct, color: "#a78bfa" },
+    { name: "Meta", value: channelRev.meta, color: "#6366f1" },
+    { name: "Google", value: channelRev.google, color: "#38bdf8" },
+    { name: "Email", value: channelRev.email, color: "#34d399" },
+    { name: "Organic", value: channelRev.organic, color: "#fbbf24" },
+    { name: "TikTok", value: channelRev.tiktok, color: "#fb7185" },
+    { name: "Direct", value: channelRev.direct, color: "#a78bfa" },
   ];
   const segDonut = data.segmentArr.map((s, i) => ({ name: s.name, value: s.count, color: ["#6366f1", "#34d399", "#fbbf24", "#fb7185", "#64748b"][i] }));
   const topProducts = data.topProducts.slice(0, 6).map((p) => ({ label: p.name.length > 16 ? p.name.slice(0, 15) + "…" : p.name, Revenue: p.revenue }));
@@ -41,7 +41,7 @@ export default function Overview() {
     <div>
       <PageHeader
         title="Executive Overview"
-        subtitle="Your command center — every connected system in one picture. Last 30 days."
+        subtitle={`Your command center — every connected system in one picture. ${range}.`}
         icon={BarChart3}
         iconAccent="brand"
         actions={
@@ -53,7 +53,7 @@ export default function Overview() {
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
-        <KpiCard label="Revenue (30d)" value={usdCompact(k.revenue30)} delta={k.revChange} icon={DollarSign} metric="revenue" accent="brand" />
+        <KpiCard label={`Revenue (${rangeLabel})`} value={usdCompact(k.revenue30)} delta={k.revChange} icon={DollarSign} metric="revenue" accent="brand" />
         <KpiCard label="Gross Profit" value={usdCompact(k.grossProfit30)} delta={6.4} icon={TrendingUp} metric="grossProfit" accent="emerald" sub={pct(k.grossMargin) + " margin"} />
         <KpiCard label="Marketing Spend" value={usdCompact(k.marketingSpend)} delta={12.1} deltaGood={false} icon={Megaphone} metric="marketingSpend" accent="rose" />
         <KpiCard label="Net Profit" value={usdCompact(k.netProfit30)} delta={4.2} icon={Wallet} metric="netProfit" accent="violet" sub={pct(k.netMargin) + " margin"} />

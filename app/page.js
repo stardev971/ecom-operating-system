@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Activity, DollarSign, Boxes, Megaphone, Sparkles, ArrowRight, Mail, Lock } from "lucide-react";
+import { setAuth } from "@/lib/auth";
 
 const FEATURES = [
   { icon: DollarSign, title: "Profit Intelligence", desc: "True profitability after COGS, ad spend, and fees — by product and channel." },
@@ -15,12 +16,20 @@ export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("ceo@ecomos.com");
   const [password, setPassword] = useState("password123");
+  const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const signIn = (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => router.push("/overview"), 550);
+    setAuth(remember, email);
+    // return to the deep-linked page the visitor originally requested, if any
+    let next = "/overview";
+    try {
+      const n = new URLSearchParams(window.location.search).get("next");
+      if (n && n.startsWith("/") && !n.startsWith("//")) next = n;
+    } catch {}
+    setTimeout(() => router.push(next), 550);
   };
 
   return (
@@ -102,7 +111,7 @@ export default function Login() {
 
             <div className="flex items-center justify-between text-xs">
               <label className="flex items-center gap-2 text-muted">
-                <input type="checkbox" defaultChecked className="accent-brand" /> Remember me
+                <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="accent-brand" /> Remember me
               </label>
               <span className="cursor-pointer text-brand-soft hover:underline">Forgot password?</span>
             </div>

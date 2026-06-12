@@ -11,8 +11,8 @@ import { PROVIDER_BY_ID } from "@/lib/integrations";
 import { num, pct } from "@/lib/format";
 
 export default function Operations() {
-  const { data, toast } = useApp();
-  const k = data.kpis;
+  const { data, toast, metrics, rangeLabel, range } = useApp();
+  const k = metrics;
   const o = data.operations;
   const [action, setAction] = useState(null);
 
@@ -27,7 +27,7 @@ export default function Operations() {
     <div>
       <PageHeader
         title="Operations Intelligence"
-        subtitle="Monitor fulfillment speed, returns, and support load across the operation."
+        subtitle={`Monitor fulfillment speed, returns, and support load across the operation. ${range}.`}
         icon={Truck}
         iconAccent="amber"
         live
@@ -43,7 +43,7 @@ export default function Operations() {
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <KpiCard label="Avg Fulfillment Time" value={`${k.avgFulfillment}d`} delta={-4.0} icon={Clock} metric="fulfillmentTime" accent="emerald" />
-        <KpiCard label="Shipping Delays" value={num(k.shippingDelays)} delta={3.2} deltaGood={false} icon={Truck} metric="fulfillmentTime" accent="amber" sub="last 30d" />
+        <KpiCard label="Shipping Delays" value={num(k.shippingDelays)} delta={3.2} deltaGood={false} icon={Truck} metric="fulfillmentTime" accent="amber" sub={`last ${rangeLabel}`} />
         <KpiCard label="Return Rate" value={pct(k.returnRate)} delta={1.1} deltaGood={false} icon={Undo2} metric="returnRate" accent="rose" />
         <KpiCard label="Open Support Tickets" value={num(k.openTickets)} delta={-8.0} icon={Headphones} metric="returnRate" accent="sky" />
       </div>

@@ -10,8 +10,8 @@ import Modal from "@/components/Modal";
 import { usd, usdCompact, num, pct } from "@/lib/format";
 
 export default function Revenue() {
-  const { data } = useApp();
-  const k = data.kpis;
+  const { data, metrics, rangeLabel, range } = useApp();
+  const k = metrics;
   const [active, setActive] = useState(null);
 
   const byCollection = data.profitByCollection.map((c) => ({ label: c.name, Profit: c.profit, Revenue: c.revenue }));
@@ -23,7 +23,7 @@ export default function Revenue() {
     <div>
       <PageHeader
         title="Revenue & Profit Intelligence"
-        subtitle="True profitability after COGS and ad spend — by product, collection, and channel."
+        subtitle={`True profitability after COGS and ad spend — by product, collection, and channel. ${range}.`}
         icon={DollarSign}
         iconAccent="brand"
         live
@@ -31,7 +31,7 @@ export default function Revenue() {
       />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-5">
-        <KpiCard label="Revenue" value={usdCompact(k.revenue30)} delta={k.revChange} icon={DollarSign} metric="revenue" accent="brand" />
+        <KpiCard label={`Revenue (${rangeLabel})`} value={usdCompact(k.revenue30)} delta={k.revChange} icon={DollarSign} metric="revenue" accent="brand" />
         <KpiCard label="COGS" value={usdCompact(k.cogs30)} delta={5.1} deltaGood={false} icon={Receipt} metric="grossProfit" accent="rose" />
         <KpiCard label="Gross Margin" value={pct(k.grossMargin)} delta={1.2} icon={Percent} metric="grossMargin" accent="emerald" />
         <KpiCard label="Net Margin" value={pct(k.netMargin)} delta={-0.6} icon={Wallet} metric="netMargin" accent="violet" />
