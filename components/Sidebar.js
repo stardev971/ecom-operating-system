@@ -16,6 +16,8 @@ import {
   Settings,
   LifeBuoy,
   Activity,
+  CalendarCheck,
+  ArrowRight,
   X,
 } from "lucide-react";
 import { useApp } from "./Providers";
@@ -107,10 +109,28 @@ export default function Sidebar({ open, onClose }) {
         </nav>
 
         <div className="border-t border-border p-3">
+          {/* Build-your-own CTA */}
+          <a
+            href="https://meetings-na2.hubspot.com/jay-sonavani"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block rounded-xl border border-brand/30 bg-gradient-to-br from-brand/15 to-violet/15 p-3 transition-colors hover:border-brand/50"
+          >
+            <p className="text-sm font-semibold text-ink">Want a system like this?</p>
+            <p className="mt-0.5 text-[11px] leading-snug text-muted">
+              Book a free call with our experts to build your own Operating System.
+            </p>
+            <span className="mt-2.5 flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-brand to-violet px-3 py-2 text-sm font-semibold text-white shadow-glow transition-transform group-hover:scale-[1.02]">
+              <CalendarCheck size={15} />
+              Talk to an Expert
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </a>
+
           <Link
             href="/settings"
             onClick={onClose}
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted hover:bg-cardhover hover:text-ink"
+            className="mt-2 flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted hover:bg-cardhover hover:text-ink"
           >
             <LifeBuoy size={17} className="text-faint" />
             <span className="font-medium">Help & Support</span>
